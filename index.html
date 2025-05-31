@@ -241,7 +241,11 @@
             });
             
             catContainer.addEventListener('click', function() {
-    counter++; 
+    if (counter % 10 === 0 && counter !== 0) {
+        const cat = document.getElementById('cat');
+        cat.style.backgroundImage = `url('./cat.jpg')`;
+    }
+}); 
 });
     }
 });
