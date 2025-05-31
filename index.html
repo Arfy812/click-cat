@@ -186,70 +186,60 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const catContainer = document.getElementById('cat-container');
-            const counterElement = document.getElementById('counter');
-            const highScoreElement = document.getElementById('high-score');
-            const resetBtn = document.getElementById('reset-btn');
-            
-            let counter = localStorage.getItem('clickerCounter') ? parseInt(localStorage.getItem('clickerCounter')) : 0;
-            let highScore = localStorage.getItem('clickerHighScore') ? parseInt(localStorage.getItem('clickerHighScore')) : 0;
-            
-            counterElement.textContent = counter;
+    const catContainer = document.getElementById('cat-container');
+    const counterElement = document.getElementById('counter');
+    const highScoreElement = document.getElementById('high-score');
+    const resetBtn = document.getElementById('reset-btn');
+    
+    let counter = localStorage.getItem('clickerCounter') ? parseInt(localStorage.getItem('clickerCounter')) : 0;
+    let highScore = localStorage.getItem('clickerHighScore') ? parseInt(localStorage.getItem('clickerHighScore')) : 0;
+    
+    counterElement.textContent = counter;
+    highScoreElement.textContent = highScore;
+    
+    function createClickEffect(x, y) {
+        const effect = document.createElement('div');
+        effect.classList.add('click-effect');
+        effect.style.left = `${x}px`;
+        effect.style.top = `${y}px`;
+        catContainer.appendChild(effect);
+        
+        setTimeout(() => {
+            effect.remove();
+        }, 600);
+    }
+    
+    function updateCounter(value) {
+        counter = value;
+        counterElement.textContent = counter;
+        localStorage.setItem('clickerCounter', counter);
+        
+        if (counter > highScore) {
+            highScore = counter;
             highScoreElement.textContent = highScore;
-            
-            function createClickEffect(x, y) {
-                const effect = document.createElement('div');
-                effect.classList.add('click-effect');
-                effect.style.left = `${x}px`;
-                effect.style.top = `${y}px`;
-                catContainer.appendChild(effect);
-                
-                setTimeout(() => {
-                    effect.remove();
-                }, 600);
-            }
-            
-            function updateCounter(value) {
-                counter = value;
-                counterElement.textContent = counter;
-                localStorage.setItem('clickerCounter', counter);
-                
-                if (counter > highScore) {
-                    highScore = counter;
-                    highScoreElement.textContent = highScore;
-                    localStorage.setItem('clickerHighScore', highScore);
-                }
-            }
-            
-            catContainer.addEventListener('click', function(e) {
-                const rect = catContainer.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                createClickEffect(x, y);
-                updateCounter(counter + 1);
-                
-                const cat = document.getElementById('cat');
-                cat.style.transform = 'rotate(5deg) scale(1.1)';
-                setTimeout(() => {
-                    cat.style.transform = 'rotate(0) scale(1)';
-                }, 200);
-            });
-            
-            resetBtn.addEventListener('click', function() {
-                updateCounter(0);
-            });
-            
-            catContainer.addEventListener('click', function() {
-                if (counter % 10 === 0 && counter !== 0) {
-                    const cat = document.getElementById('cat');
-                    cat.style.backgroundImage = `url('./cat.jpg')`;
+            localStorage.setItem('clickerHighScore', highScore);
+        }
     }
-}); 
+    
+    catContainer.addEventListener('click', function(e) {
+        const rect = catContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        createClickEffect(x, y);
+        updateCounter(counter + 1);
+        
+        const cat = document.getElementById('cat');
+        cat.style.transform = 'rotate(5deg) scale(1.1)';
+        setTimeout(() => {
+            cat.style.transform = 'rotate(0) scale(1)';
+        }, 200);
+    });
+    
+    resetBtn.addEventListener('click', function() {
+        updateCounter(0);
+    });
 });
-    }
-});
-        });
     </script>
 </body>
 </html>
